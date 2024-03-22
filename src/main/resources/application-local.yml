@@ -1,28 +1,7 @@
 spring:
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: ${DB_MIGRATION_ENABLE:true}
+    url: jdbc:postgresql://localhost:5433/stock_db
+    username: local
+    password: local
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-    producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      acks: 1
-    consumer:
-      properties:
-        spring.json.trusted.packages: ru.mai.*
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      enable-auto-commit: true
-      group-id: shop-group
-    topics:
-      new-sale:
-        name: new-sale-event
-      refund:
-        name: refund-event
+    bootstrap-servers: http://localhost:29092
