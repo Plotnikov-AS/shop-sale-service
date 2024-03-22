@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: Shop Sale Service
+  description: Сервис продаж
+  version: v0.0.1
+servers:
+  - url: http://localhost:8081/shop/sales/api/
+    description: LOCAL
+tags:
+  - name: Sale
+    description: Продажа
+paths:
+  /v1/sale/{id}:
+    get:
+      tags:
+        - Sale
+      summary: Получить продажу
+      operationId: getSaleById
+      parameters:
+         - name: id
+           in: path
+           required: true
+           schema:
+             type: string
+             format: uuid
+      responses:
+        200:
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleDto'
+
+  /v1/sales:
+    post:
+      tags:
+        - Sale
+      summary: Создать новую продажу
+      operationId: createNewSale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSaleRequest'
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleDto'
+
+    get:
+      x-spring-paginated: true
+      tags:
+        - Sale
+      summary: Получить продажи
+      operationId: getAllSales
+      responses:
+        200:
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedSalesResponse'
+
+components:
+  schemas:
+    NewSaleRequest:
+      type: object
+      description: Запрос создания новой продажи
+      properties:
+        type:
+          $ref: '#/components/schemas/SaleType'
+        products:
+          description: Проданные товары
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ProductDto'
+
+    SalesResponse:
+      type: object
+      description: Продажи
+      properties:
+        sales:
+          description: Оформленные продажи
+          type: array
+          items:
+            $ref: '#/components/schemas/SaleDto'
+
+    SaleDto:
+      type: object
+      description: Продажа
+      properties:
+        id:
+          type: string
+          format: uuid
+        products:
+          type: array
+          description: Проданные товары
+          items:
+            $ref: '#/components/schemas/ProductDto'
+        costTotal:
+          type: number
+          description: Общая сумма продажи
+        type:
+          $ref: '#/components/schemas/SaleType'
+
+    SaleType:
+      type: string
+      description: |
+        Тип продажи:
+        * `STORE` - Прямая продажа в магазине
+        * `DELIVERY` - Продажа доставкой
+        * `REFUND` - Возврат
+      enum:
+        - STORE
+        - DELIVERY
+        - REFUND
+
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/ProductTypeDto'
+        price:
+          type: number
+          description: Цена товара за единицу
+        count:
+          type: integer
+          description: Количество товара
+
+    ProductTypeDto:
+      type: object
+      description: Тип продукта
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    PagedSalesResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/SaleDto'
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        totalElements:
+          type: integer
+          format: int64
+        last:
+          type: boolean
+        totalPages:
+          type: integer
+        number:
+          type: integer
+        size:
+          type: integer
+        sort:
+          $ref: '#/components/schemas/Sort'
+        numberOfElements:
+          type: integer
+        first:
+          type: boolean
+        empty:
+          type: boolean
+    Pageable:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/Sort'
+        offset:
+          type: integer
+        pageSize:
+          type: integer
+        pageNumber:
+          type: integer
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    Sort:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean

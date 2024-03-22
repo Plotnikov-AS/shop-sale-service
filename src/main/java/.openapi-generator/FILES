@@ -1,0 +1,13 @@
+README.md
+pom.xml
+ru/mai/shop/sale/generated/api/ApiUtil.java
+ru/mai/shop/sale/generated/api/SaleApi.java
+ru/mai/shop/sale/generated/dto/NewSaleRequest.java
+ru/mai/shop/sale/generated/dto/Pageable.java
+ru/mai/shop/sale/generated/dto/PagedSalesResponse.java
+ru/mai/shop/sale/generated/dto/ProductDto.java
+ru/mai/shop/sale/generated/dto/ProductTypeDto.java
+ru/mai/shop/sale/generated/dto/SaleDto.java
+ru/mai/shop/sale/generated/dto/SaleType.java
+ru/mai/shop/sale/generated/dto/SalesResponse.java
+ru/mai/shop/sale/generated/dto/Sort.java

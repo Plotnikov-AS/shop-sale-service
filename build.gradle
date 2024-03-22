@@ -1,0 +1,92 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id "io.freefair.lombok" version "8.4"
+    id 'org.openapi.generator' version '7.2.0'
+    id 'org.liquibase.gradle' version '2.2.0'
+}
+
+group = 'ru.mai.shop'
+version = '0.0.1'
+java {
+    sourceCompatibility = '21'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.liquibase:liquibase-core'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0"
+    implementation "org.apache.commons:commons-lang3:3.12.0"
+    implementation "org.apache.commons:commons-collections4:4.4"
+    implementation "org.modelmapper:modelmapper:3.1.0"
+    implementation "org.hibernate:hibernate-validator:8.0.0.Final"
+    runtimeOnly 'org.postgresql:postgresql'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+}
+
+sourceSets {
+    generated {
+        java {
+            srcDirs = ['src/generated/java', 'ru/mai/shop/sale/generated']
+        }
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.0"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+compileJava.dependsOn(tasks.openApiGenerate)
+
+openApiGenerate {
+    importMappings.put("Pageable", "org.springframework.data.domain.Pageable")
+    importMappings.put("Sort", "org.springframework.data.domain.Sort")
+
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/static/API.yml".toString()
+    outputDir = "$rootDir/src/main/java".toString()
+    apiPackage = "ru.mai.shop.sale.generated.api"
+    modelPackage = "ru.mai.shop.sale.generated.dto"
+    configOptions.put("dateLibrary", "java8")
+    configOptions.put("useTags", "true")
+    configOptions.put("interfaceOnly", "true")
+    configOptions.put("openApiNullable", "false")
+    configOptions.put("useOptional", "true")
+    configOptions.put("useSpringBoot3", "true")
+    configOptions.put("sourceFolder", "")
+}
+
+afterEvaluate {
+    generateEffectiveLombokConfig.mustRunAfter('openApiGenerate')
+}

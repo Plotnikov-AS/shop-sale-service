@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: init.sales
+      author: plotnikov.anton
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/1.0.0/init.sales.sql
