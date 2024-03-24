@@ -10,7 +10,7 @@ tags:
   - name: Sale
     description: Продажа
 paths:
-  /v1/sale/{id}:
+  /v1/sales/{id}:
     get:
       tags:
         - Sale
