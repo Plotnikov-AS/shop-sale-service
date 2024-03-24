@@ -64,4 +64,9 @@ public class SalesServiceImpl implements SalesService {
                 .map(sale -> mapper.map(sale, SaleDto.class))
                 .orElseThrow(() -> new IllegalArgumentException("Продажа с ID %s не найдена".formatted(id)));
     }
+
+    @Override
+    public void delete(UUID id) {
+        salesRepo.deleteById(id);
+    }
 }

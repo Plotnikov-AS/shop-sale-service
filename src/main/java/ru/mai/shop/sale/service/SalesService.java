@@ -14,4 +14,6 @@ public interface SalesService {
     PagedSalesResponse getAllSales(Pageable pageable);
 
     SaleDto getSale(UUID id);
+
+    void delete(UUID id);
 }

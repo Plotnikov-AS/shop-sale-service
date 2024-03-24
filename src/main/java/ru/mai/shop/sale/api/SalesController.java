@@ -32,4 +32,10 @@ public class SalesController implements SaleApi {
     public ResponseEntity<SaleDto> getSaleById(UUID id) {
         return ResponseEntity.ok(salesService.getSale(id));
     }
+
+    @Override
+    public ResponseEntity<Void> deleteSaleById(UUID id) {
+        salesService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }
