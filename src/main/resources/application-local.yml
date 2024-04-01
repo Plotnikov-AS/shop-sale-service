@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/stock_db
+    url: jdbc:postgresql://localhost:5433/sale_db
     username: local
     password: local
   kafka:

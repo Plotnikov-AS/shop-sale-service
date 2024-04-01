@@ -1,5 +1,7 @@
 server:
   port: 8081
+  servlet:
+    context-path: /shop/sales/api
 
 spring:
   jpa:
@@ -15,13 +17,13 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
       acks: 1
     consumer:
       properties:
         spring.json.trusted.packages: ru.mai.*
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       enable-auto-commit: true
       group-id: shop-group
     topics:
